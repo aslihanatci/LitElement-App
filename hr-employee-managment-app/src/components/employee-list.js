@@ -265,6 +265,7 @@ class EmployeeList extends LitElement {
         </button>
       </div>
       ${this.viewMode === 'table' ? this.renderTable() : this.renderList()}
+      ${this.renderPagination()}
     `;
   }
 
@@ -360,6 +361,39 @@ class EmployeeList extends LitElement {
             </div>
           `
         )}
+      </div>
+    `;
+  }
+    renderPagination() {
+    const totalPages = Math.ceil(this.employees.length / this.itemsPerPage);
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    return html`
+      <div class="pagination">
+        <button 
+          class="pagination-arrow" 
+          @click="${() => this.changePage(-1)}" 
+          ?disabled="${this.currentPage === 1}"
+        >
+          <
+        </button>
+        ${pageNumbers.map(
+          (page) => html`
+            <button
+              class="pagination-number ${this.currentPage === page ? 'active' : ''}"
+              @click="${() => this.goToPage(page)}"
+            >
+              ${page}
+            </button>
+          `
+        )}
+        <button 
+          class="pagination-arrow" 
+          @click="${() => this.changePage(1)}" 
+          ?disabled="${this.currentPage === totalPages}"
+        >
+          >
+        </button>
       </div>
     `;
   }
